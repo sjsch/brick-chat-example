@@ -1,0 +1,33 @@
+cabal-version: 3.0
+name: chat
+version: 0.1.0.0
+build-type: Simple
+
+library
+  hs-source-dirs: src
+  exposed-modules: Shared
+  build-depends: base
+               , text
+               , cereal
+               , network-simple
+
+executable chat-server
+  main-is: Server.hs
+  ghc-options: -threaded
+  build-depends: base
+               , network-simple
+               , chat
+
+executable chat-client
+  main-is: Client.hs
+  ghc-options: -threaded
+  build-depends: base
+               , bytestring
+               , network-simple
+               , brick
+               , text
+               , vty
+               , microlens
+               , microlens-th
+               , text-zipper
+               , chat
