@@ -3,24 +3,19 @@ name: chat
 version: 0.1.0.0
 build-type: Simple
 
-library
-  hs-source-dirs: src
-  exposed-modules: Shared
-  build-depends: base
-               , text
-               , cereal
-               , network-simple
-
 executable chat-server
   main-is: Server.hs
   ghc-options: -threaded
+  default-language: Haskell2010
   build-depends: base
                , network-simple
-               , chat
+               , cereal
+               , text
 
 executable chat-client
   main-is: Client.hs
   ghc-options: -threaded
+  default-language: Haskell2010
   build-depends: base
                , bytestring
                , network-simple
@@ -30,4 +25,24 @@ executable chat-client
                , microlens
                , microlens-th
                , text-zipper
-               , chat
+               , cereal
+
+executable chat-gclient
+  main-is: GClient.hs
+  ghc-options: -threaded -Wall
+  default-language: Haskell2010
+  other-modules: Shared
+  build-depends: base
+               , text
+               , cereal
+               , network-simple
+               , haskell-gi-base
+               , gi-gtk
+               , gi-gdk
+               , gi-gtk-declarative
+               , gi-gtk-declarative-app-simple
+               , pipes
+               , pipes-extras
+               , lens
+               , vector
+               , async

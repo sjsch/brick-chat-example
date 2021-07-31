@@ -10,6 +10,7 @@ import qualified Data.Text.Encoding as TE
 import GHC.Generics
 import Network.Simple.TCP
 
+chatPort :: String
 chatPort = "3333"
 
 instance Serialize Text where

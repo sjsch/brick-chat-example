@@ -51,9 +51,8 @@ main = do
   vty <- buildVty
 
   eventC <- newBChan 5
-  let recvLoop = handle (\(_ :: IOException) -> pure ()) $ do
-        recvE sock >>= writeBChan eventC
-        recvLoop
+  let recvLoop = handle (\(_ :: IOException) -> pure ()) $
+        forever $ recvE sock >>= writeBChan eventC
   forkIO recvLoop
 
   customMain vty buildVty (Just eventC) app startState
@@ -87,12 +86,12 @@ handleEvent s (AppEvent msg) = continue $ s & chatHistory %~ (msg :)
 handleEvent s _ = continue s
 
 draw s =
-  [ padTop Max $
+  [ padBottom Max $
       vBox
-        [ historyWidget,
+        [ drawNick (s ^. chatNick)
+            <+> renderEditor (hBox . map txt) True (s ^. chatEditor),
           hBorder,
-          drawNick (s ^. chatNick)
-            <+> renderEditor (hBox . map txt) True (s ^. chatEditor)
+          historyWidget
         ]
   ]
   where
@@ -101,7 +100,7 @@ draw s =
     renderHistory = do
       ctx <- getContext
       let height = ctx ^. availHeightL
-      let widget = vBox . map drawMessage . reverse . take height $ s ^. chatHistory
+      let widget = vBox . map drawMessage . take height $ s ^. chatHistory
       render widget
 
     drawNick nick =

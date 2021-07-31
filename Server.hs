@@ -10,7 +10,7 @@ import Shared
 
 main = do
   msgC <- newChan
-  serve HostIPv4 "3333" (handleConn msgC)
+  serve HostIPv4 chatPort (handleConn msgC)
 
 handleConn msgC (sock, _) = do
   Join nick <- recvE sock
